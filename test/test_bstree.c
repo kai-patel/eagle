@@ -35,8 +35,8 @@ void createTestTree(void) {
   for (int i = 1; i <= 6; i++) {
     int *val = malloc(sizeof(int));
     *val = i;
-    TEST_ASSERT_NOT_NULL_MESSAGE(tree->add(tree, val, compare),
-                                 "Expected to be able to add to tree");
+    tree = tree->add(tree, val, compare);
+    TEST_ASSERT_NOT_NULL_MESSAGE(tree, "Expected to be able to add to tree");
   }
 }
 
@@ -70,8 +70,11 @@ void test_remove(void) {
   int *to_remove = malloc(sizeof(int));
   *to_remove = 5;
 
-  TEST_ASSERT_NOT_NULL_MESSAGE(tree->remove(tree, to_remove, compare),
-                               "Expected to be able to remove from tree");
+  tree = tree->remove(tree, to_remove, compare);
+
+  free(to_remove);
+
+  TEST_ASSERT_NOT_NULL_MESSAGE(tree, "Expected to be able to remove from tree");
   TEST_ASSERT_NOT_NULL_MESSAGE(tree, "Expected tree to exist");
   TEST_ASSERT_EQUAL_INT(3, *(int *)tree->value);
   TEST_ASSERT_NOT_NULL_MESSAGE(tree->left, "Expected node w/ value 1 to exist");
@@ -84,10 +87,10 @@ void test_remove(void) {
   TEST_ASSERT_EQUAL_INT(2, *(int *)tree->left->right->value);
   TEST_ASSERT_NOT_NULL_MESSAGE(tree->right,
                                "Expected node w/ value 4 to exist");
-  TEST_ASSERT_EQUAL_INT(4, *(int *)tree->right->value);
-  TEST_ASSERT_NOT_NULL_MESSAGE(tree->right->right,
+  TEST_ASSERT_EQUAL_INT(6, *(int *)tree->right->value);
+  TEST_ASSERT_NOT_NULL_MESSAGE(tree->right->left,
                                "Expected node w/ value 6 to exist");
-  TEST_ASSERT_EQUAL_INT(6, *(int *)tree->right->right->value);
+  TEST_ASSERT_EQUAL_INT(4, *(int *)tree->right->left->value);
 }
 
 void test_find(void) {
@@ -110,7 +113,7 @@ void test_minimum(void) {
   for (int i = 1; i < 5; i++) {
     int *val = malloc(sizeof(int));
     *val = i;
-    tree->add(tree, val, compare);
+    tree = tree->add(tree, val, compare);
   }
   TEST_ASSERT_EQUAL_INT(0, *(int *)(tree->minimum(tree)->value));
 }
