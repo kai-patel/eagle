@@ -1,4 +1,5 @@
 #include "egl_hmap.h"
+#include <assert.h>
 #include <stdint.h>
 #include <stdlib.h>
 
@@ -46,12 +47,27 @@ static size_t hash(void *k, size_t capacity) {
  */
 
 static void egl_hmap_free(struct egl_hmap *map) {
+  if (map == NULL)
+    return;
+
+  if (map->array == NULL)
+    return;
+
   for (size_t i = 0; i < map->capacity; i++) {
-    free(map->array[i]->key);
-    free(map->array[i]->value);
-    free(map->array[i]);
+    if (map->array[i] != NULL) {
+      if (map->array[i]->key == map->array[i]->value) {
+        free(map->array[i]->key); // Only free one if they're the same pointer
+      } else {
+        if (map->array[i]->key != NULL)
+          free(map->array[i]->key);
+        if (map->array[i]->value != NULL)
+          free(map->array[i]->value);
+      }
+      free(map->array[i]);
+    }
   }
 
+  free(map->array);
   free(map);
 }
 
@@ -181,7 +197,12 @@ static egl_hmap *egl_hmap_init(struct egl_hmap *map, size_t capacity) {
     return NULL;
 
   map->size = 0;
-  map->array = calloc(capacity, sizeof(struct egl_hmap_bucket *));
+  map->array = malloc(capacity * sizeof(struct egl_hmap_bucket *));
+
+  for (size_t i = 0; i < capacity; i++) {
+    map->array[i] = NULL;
+  }
+
   map->capacity = capacity;
   map->add = &egl_hmap_add;
   map->remove = &egl_hmap_remove;
