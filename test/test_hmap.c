@@ -37,11 +37,41 @@ void test_remove(void) {
   res = map->remove(map, to_remove, compare);
   TEST_ASSERT_NULL_MESSAGE(
       res, "Expected to not be able to remove element not in map");
+
+  free(to_remove);
 }
 
-void test_contains_key(void) {}
+void test_contains_key(void) {
+  test_add();
 
-void test_contains_value(void) {}
+  int *to_find = malloc(sizeof(int));
+  *to_find = 24;
+
+  TEST_ASSERT_TRUE_MESSAGE(map->contains_key(map, to_find, compare),
+                           "Expected to be able to find key 24 in map");
+
+  *to_find = 1024;
+  TEST_ASSERT_FALSE_MESSAGE(map->contains_key(map, to_find, compare),
+                            "Expected not to find key 1024 in map");
+
+  free(to_find);
+}
+
+void test_contains_value(void) {
+  test_add();
+
+  int *to_find = malloc(sizeof(int));
+  *to_find = 24;
+
+  TEST_ASSERT_TRUE_MESSAGE(map->contains_value(map, to_find, compare),
+                           "Expected to be able to find value 24 in map");
+
+  *to_find = 1024;
+  TEST_ASSERT_FALSE_MESSAGE(map->contains_value(map, to_find, compare),
+                            "Expected not to find value 1024 in map");
+
+  free(to_find);
+}
 
 void test_get(void) {}
 
