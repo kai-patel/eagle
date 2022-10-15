@@ -83,8 +83,6 @@ void test_get(void) {
   TEST_ASSERT_EQUAL_INT(*to_get, *(int *)res);
 }
 
-void test_to_array(void) {}
-
 int main(void) {
   UNITY_BEGIN();
   RUN_TEST(test_add);
@@ -92,6 +90,5 @@ int main(void) {
   RUN_TEST(test_contains_key);
   RUN_TEST(test_contains_value);
   RUN_TEST(test_get);
-  RUN_TEST(test_to_array);
   return UNITY_END();
 }
