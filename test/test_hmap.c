@@ -12,9 +12,12 @@ void setUp(void) {
   TEST_ASSERT_NOT_NULL_MESSAGE(map, "Expected new egl_hmap to be created");
 }
 
-void tearDown(void) { map->free(map); }
+void tearDown(void) {
+  map->free(map);
+  return;
+}
 
-void test_add(void) {
+void createTestMap(void) {
   for (int i = 0; i < 256; i++) {
     int *to_add = malloc(sizeof(int));
     *to_add = i;
@@ -24,9 +27,10 @@ void test_add(void) {
   }
 }
 
-void test_remove(void) {
-  test_add();
+void test_add(void) { createTestMap(); }
 
+void test_remove(void) {
+  createTestMap();
   int *to_remove = malloc(sizeof(int));
   *to_remove = 5;
 
@@ -42,7 +46,7 @@ void test_remove(void) {
 }
 
 void test_contains_key(void) {
-  test_add();
+  createTestMap();
 
   int *to_find = malloc(sizeof(int));
   *to_find = 24;
@@ -58,7 +62,7 @@ void test_contains_key(void) {
 }
 
 void test_contains_value(void) {
-  test_add();
+  createTestMap();
 
   int *to_find = malloc(sizeof(int));
   *to_find = 24;
@@ -74,7 +78,7 @@ void test_contains_value(void) {
 }
 
 void test_get(void) {
-  test_add();
+  createTestMap();
 
   int *to_get = malloc(sizeof(int));
   *to_get = 30;
