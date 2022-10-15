@@ -18,7 +18,7 @@ static bool is_prime(size_t n) {
   if (n == 2)
     return true;
 
-  for (size_t i = 1; i < n; i++) {
+  for (size_t i = 2; i < n; i++) {
     if (n % i == 0) {
       return false;
     }
