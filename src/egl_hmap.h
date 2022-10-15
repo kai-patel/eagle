@@ -2,10 +2,11 @@
 #define EGL_HMAP_H
 
 #include <stdbool.h>
+#include "egl_vector.h"
 
 typedef struct egl_hmap {
   size_t size;
-  void *(*add)(struct egl_hmap *, void *);
+  void *(*add)(struct egl_hmap *, void *, void *);
   void *(*remove)(struct egl_hmap *, void *);
   bool (*contains_key)(struct egl_hmap *, void *);
   bool (*contains_value)(struct egl_hmap *, void *);
