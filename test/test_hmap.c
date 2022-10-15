@@ -4,13 +4,40 @@
 
 egl_hmap *map;
 
-void setUp(void) {}
+int compare(const void *a, const void *b) { return *((int *)a) - *((int *)b); }
 
-void tearDown(void) {}
+void setUp(void) {
+  map = egl_hmap_new(0);
 
-void test_add(void) {}
+  TEST_ASSERT_NOT_NULL_MESSAGE(map, "Expected new egl_hmap to be created");
+}
 
-void test_remove(void) {}
+void tearDown(void) { map->free(map); }
+
+void test_add(void) {
+  for (int i = 0; i < 256; i++) {
+    int *to_add = malloc(sizeof(int));
+    *to_add = i;
+    void *res = map->add(map, to_add, to_add, compare);
+    TEST_ASSERT_NOT_NULL_MESSAGE(res, "Expected to be able to add");
+    TEST_ASSERT_EQUAL_PTR(to_add, res);
+  }
+}
+
+void test_remove(void) {
+  test_add();
+
+  int *to_remove = malloc(sizeof(int));
+  *to_remove = 5;
+
+  void *res = map->remove(map, to_remove, compare);
+  TEST_ASSERT_NOT_NULL_MESSAGE(res, "Expected to be able to remove");
+
+  *to_remove = 256;
+  res = map->remove(map, to_remove, compare);
+  TEST_ASSERT_NULL_MESSAGE(
+      res, "Expected to not be able to remove element not in map");
+}
 
 void test_contains_key(void) {}
 
