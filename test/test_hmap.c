@@ -73,7 +73,15 @@ void test_contains_value(void) {
   free(to_find);
 }
 
-void test_get(void) {}
+void test_get(void) {
+  test_add();
+
+  int *to_get = malloc(sizeof(int));
+  *to_get = 30;
+
+  void *res = map->get(map, to_get, compare);
+  TEST_ASSERT_EQUAL_INT(*to_get, *(int *)res);
+}
 
 void test_to_array(void) {}
 
