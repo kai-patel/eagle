@@ -2,17 +2,18 @@
 
 **A Standard Library for C**
 
-## Partially Implemented
+## Fully or Partially Implemented
 
 - Vectors
-- Binary Search Trees
+- AVL-Balanced Binary Search Trees
 - Singly Linked Lists
+- Hash Tables
 
 ## Semantics
 
-- Data structures represented as structs
-- "Methods" on data structures stored as function pointers in struct
-- Return NULL on error
+- Data structures are represented as structs
+- "Methods" on data structures are stored as function pointers in struct
+- Favour returning NULL on error
 
 ## TODO
 
