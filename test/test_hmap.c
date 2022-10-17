@@ -1,5 +1,6 @@
 #include "../src/libeagle.h"
 #include "../vendor/Unity/unity.h"
+#include <stdint.h>
 #include <stdlib.h>
 
 egl_hmap *map;
@@ -7,7 +8,7 @@ egl_hmap *map;
 int compare(const void *a, const void *b) { return *((int *)a) - *((int *)b); }
 
 void setUp(void) {
-  map = egl_hmap_new(0);
+  map = egl_hmap_new(37);
 
   TEST_ASSERT_NOT_NULL_MESSAGE(map, "Expected new egl_hmap to be created");
 }
@@ -18,7 +19,7 @@ void tearDown(void) {
 }
 
 void createTestMap(void) {
-  for (int i = 0; i < 256; i++) {
+  for (int i = 0; i < 32; i++) {
     int *to_add = malloc(sizeof(int));
     *to_add = i;
     void *res = map->add(map, to_add, to_add, compare);
@@ -31,10 +32,11 @@ void test_add(void) { createTestMap(); }
 
 void test_remove(void) {
   createTestMap();
+
   int *to_remove = malloc(sizeof(int));
   *to_remove = 5;
 
-  void *res = map->remove(map, to_remove, compare);
+  egl_hmap *res = map->remove(map, to_remove, compare);
   TEST_ASSERT_NOT_NULL_MESSAGE(res, "Expected to be able to remove");
 
   *to_remove = 256;
@@ -49,7 +51,7 @@ void test_contains_key(void) {
   createTestMap();
 
   int *to_find = malloc(sizeof(int));
-  *to_find = 24;
+  *to_find = 5;
 
   TEST_ASSERT_TRUE_MESSAGE(map->contains_key(map, to_find, compare),
                            "Expected to be able to find key 24 in map");
@@ -84,7 +86,10 @@ void test_get(void) {
   *to_get = 30;
 
   void *res = map->get(map, to_get, compare);
+  TEST_ASSERT_NOT_NULL_MESSAGE(res, "Expected to be able to get");
   TEST_ASSERT_EQUAL_INT(*to_get, *(int *)res);
+
+  free(to_get);
 }
 
 int main(void) {
