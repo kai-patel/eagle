@@ -8,7 +8,7 @@ egl_hmap *map;
 int compare(const void *a, const void *b) { return *((int *)a) - *((int *)b); }
 
 void setUp(void) {
-  map = egl_hmap_new(37);
+  map = egl_hmap_new(0);
 
   TEST_ASSERT_NOT_NULL_MESSAGE(map, "Expected new egl_hmap to be created");
 }
