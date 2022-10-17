@@ -18,6 +18,7 @@ typedef struct egl_matrix {
   struct egl_matrix *(*sum)(size_t, enum EGL_MATRIX_AXIS);
   double (*trace)(struct egl_matrix *);
   double (*det)(struct egl_matrix *);
+  void (*free)(struct egl_matrix *);
 } egl_matrix;
 
 egl_matrix *egl_matrix_new(size_t, size_t);
