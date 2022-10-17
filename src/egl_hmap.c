@@ -1,5 +1,4 @@
 #include "egl_hmap.h"
-#include <stdint.h>
 #include <stdlib.h>
 
 #ifndef EAGLE_INTERNAL_HMAP_INITIAL_CAPACITY
@@ -115,7 +114,6 @@ static void *egl_hmap_add(struct egl_hmap *map, void *key, void *value,
  * Removals are marked with a tombstone
  * Tombstones are a buckets with key NULL
  * Returns the egl_hmap on success
- * IMPORTANT: Removal frees the key, value, and encapsulating bucket struct
  * Returns NULL if an error occurred
  */
 
@@ -129,13 +127,17 @@ static egl_hmap *egl_hmap_remove(struct egl_hmap *map, void *key,
       map->array[index].key = NULL;
       map->size--;
 
-      for (uint64_t i = (index + 1) % map->capacity;
-           i < map->capacity && map->array[i].key != NULL;
-           i = (i + 1) % map->capacity) {
-        map->array[index] = map->array[i];
-        map->array[i].key = NULL;
-        return map;
+      uint64_t i = index;
+      while (map->array[i].key != NULL) {
+        if (hash(map->array[i].key, map->capacity) <= index)
+          break;
+        i = (i + 1) % map->capacity;
       }
+
+      // Element "i" is now either empty or needs to be moved
+      map->array[index] = map->array[i];
+      map->array[i].key = NULL;
+      map->array[i].value = NULL;
 
       return map;
     }
