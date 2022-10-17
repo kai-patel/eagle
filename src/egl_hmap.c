@@ -124,6 +124,7 @@ static egl_hmap *egl_hmap_remove(struct egl_hmap *map, void *key,
 
   while (map->array[index].key != NULL) {
     if (compare(map->array[index].key, key) == 0) {
+      free_bucket(&map->array[index]);
       map->array[index].key = NULL;
       map->size--;
 
