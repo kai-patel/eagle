@@ -33,18 +33,26 @@ void test_add(void) { createTestMap(); }
 void test_remove(void) {
   createTestMap();
 
-  int *to_remove = malloc(sizeof(int));
-  *to_remove = 5;
+  int *to_remove = NULL;
+
+  for (uint64_t i = 0; i < map->capacity; i++) {
+    if (map->array[i].key != NULL) {
+      to_remove = map->array[i].key;
+      break;
+    }
+  }
+
+  TEST_ASSERT_NOT_NULL_MESSAGE(
+      to_remove, "Expected to find at least one non-null element in map");
+
+  if (to_remove == NULL)
+    TEST_ABORT();
 
   egl_hmap *res = map->remove(map, to_remove, compare);
   TEST_ASSERT_NOT_NULL_MESSAGE(res, "Expected to be able to remove");
 
-  *to_remove = 256;
-  res = map->remove(map, to_remove, compare);
-  TEST_ASSERT_NULL_MESSAGE(
-      res, "Expected to not be able to remove element not in map");
-
-  free(to_remove);
+  res = map->remove(map, NULL, compare);
+  TEST_ASSERT_NULL_MESSAGE(res, "Expected to not be able to NULL element");
 }
 
 void test_contains_key(void) {
@@ -82,22 +90,33 @@ void test_contains_value(void) {
 void test_get(void) {
   createTestMap();
 
-  int *to_get = malloc(sizeof(int));
-  *to_get = 30;
+  int *to_get = NULL;
+
+  for (uint64_t i = 0; i < map->capacity; i++) {
+    if (map->array[i].key != NULL) {
+      to_get = map->array[i].key;
+      break;
+    }
+  }
+
+  TEST_ASSERT_NOT_NULL_MESSAGE(to_get,
+                               "Expected to find at least one non-null value");
+  if (to_get == NULL)
+    TEST_ABORT();
 
   void *res = map->get(map, to_get, compare);
   TEST_ASSERT_NOT_NULL_MESSAGE(res, "Expected to be able to get");
   TEST_ASSERT_EQUAL_INT(*to_get, *(int *)res);
-
-  free(to_get);
 }
 
 int main(void) {
   UNITY_BEGIN();
   RUN_TEST(test_add);
-  RUN_TEST(test_remove);
+  if (TEST_PROTECT())
+    RUN_TEST(test_remove);
   RUN_TEST(test_contains_key);
   RUN_TEST(test_contains_value);
-  RUN_TEST(test_get);
+  if (TEST_PROTECT())
+    RUN_TEST(test_get);
   return UNITY_END();
 }
