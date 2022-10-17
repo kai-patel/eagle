@@ -165,7 +165,7 @@ static struct egl_bstree *egl_bstree_add(struct egl_bstree *tree, void *i,
  * Returns NULL if the value is not found
  */
 
-static egl_bstree *egl_bstree_find(struct egl_bstree *const tree, const void *i,
+static egl_bstree *egl_bstree_find(struct egl_bstree *const tree, void *const i,
                                    int (*compare)(const void *, const void *)) {
   if (tree == NULL)
     return NULL;

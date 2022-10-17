@@ -21,17 +21,17 @@ typedef struct egl_hmap {
                int (*compare)(const void *, const void *));
   struct egl_hmap *(*remove)(struct egl_hmap *, void *,
                              int (*compare)(const void *, const void *));
-  bool (*contains_key)(struct egl_hmap *, void *,
+  bool (*contains_key)(struct egl_hmap *const, void *const,
                        int (*compare)(const void *, const void *));
-  bool (*contains_value)(struct egl_hmap *, void *,
+  bool (*contains_value)(struct egl_hmap *const, void *const,
                          int (*compare)(const void *, const void *));
-  void *(*get)(struct egl_hmap *, void *,
+  void *(*get)(struct egl_hmap *, void *const,
                int (*compare)(const void *, const void *));
   struct egl_hmap_bucket *array;
   void (*free)(struct egl_hmap *);
 } egl_hmap;
 
 egl_hmap *egl_hmap_new(size_t);
-uint64_t hash(void*, uint64_t);
+uint64_t hash(void *, uint64_t);
 
 #endif

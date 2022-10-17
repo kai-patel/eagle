@@ -8,10 +8,10 @@ typedef struct egl_llist_node {
 
 typedef struct egl_llist {
   egl_llist_node *head;
-  egl_llist_node *(*find)(struct egl_llist *, void *,
+  egl_llist_node *(*find)(struct egl_llist *const, void *const,
                           int (*)(const void *, const void *));
   void (*reverse)(struct egl_llist *);
-  egl_llist_node *(*add)(struct egl_llist *, void *);
+  egl_llist_node *(*add)(struct egl_llist *, void *const);
   void (*free)(struct egl_llist *);
   void (*delete_p)(struct egl_llist *, void *); // Delete-by-pointer
   void (*delete_v)(struct egl_llist *, void *,

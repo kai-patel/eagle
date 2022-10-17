@@ -8,14 +8,14 @@ typedef struct egl_bstree {
   int height;
   struct egl_bstree *left;
   struct egl_bstree *right;
-  struct egl_bstree *(*add)(struct egl_bstree *, void *,
+  struct egl_bstree *(*add)(struct egl_bstree *, void *const,
                             int (*)(const void *, const void *));
-  struct egl_bstree *(*find)(struct egl_bstree *const, const void *,
+  struct egl_bstree *(*find)(struct egl_bstree *const, void *const,
                              int (*)(const void *, const void *));
   struct egl_bstree *(*remove)(struct egl_bstree *, void *,
                                int (*)(const void *, const void *));
-  struct egl_bstree *(*minimum)(struct egl_bstree *tree);
-  struct egl_bstree *(*maximum)(struct egl_bstree *tree);
+  struct egl_bstree *(*minimum)(struct egl_bstree *const tree);
+  struct egl_bstree *(*maximum)(struct egl_bstree *const tree);
   void (*free)(struct egl_bstree *);
 } egl_bstree;
 

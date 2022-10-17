@@ -11,7 +11,7 @@ typedef struct egl_vector {
   void **items;
   uint32_t capacity;
   uint32_t length;
-  void *(*add)(struct egl_vector *, void *);
+  void *(*add)(struct egl_vector *, void *const);
   void (*free)(struct egl_vector *);
   struct egl_vector *(*resize)(struct egl_vector *, uint32_t);
 } egl_vector;
