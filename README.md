@@ -1,5 +1,7 @@
 # Eagle
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/badc3452ea2843b09ca0f2ff9cd74ca0)](https://app.codacy.com/gh/kai-patel/eagle?utm_source=github.com&utm_medium=referral&utm_content=kai-patel/eagle&utm_campaign=Badge_Grade_Settings)
+
 **A Standard Library for C**
 
 ## Fully or Partially Implemented
