@@ -122,11 +122,47 @@ static struct egl_matrix *egl_matrix_mul(struct egl_matrix *a,
 
 /*
  * Calculate the inverse of a given matrix
- * Returns NULL if an error occurred
+ * Returns NULL if the matrix is not square, or an error occurred
  */
 
 static struct egl_matrix *egl_matrix_inverse(struct egl_matrix *a) {
-  return NULL;
+  if (a->m != a->n)
+    return NULL;
+
+  size_t n = a->m;
+
+  for (size_t i = 0; i < n; i++) {
+    for (size_t j = 0; j < n; j++) {
+      if (i == j) {
+        a->elements[(j + n) + i * n] = 1.0;
+      } else {
+        a->elements[(j + n) + i * n] = 0.0;
+      }
+    }
+  }
+
+  for (size_t i = 0; i < n; i++) {
+    if (a->elements[i + i * n] == 0)
+      return NULL;
+
+    for (size_t j = 0; j < n; j++) {
+      if (i != j) {
+        double ratio = a->elements[i + j * n] / a->elements[i + i * n];
+        for (size_t k = 0; k < 2 * n; k++) {
+          a->elements[k + j * n] =
+              a->elements[k + j * n] - (ratio * a->elements[k + i * n]);
+        }
+      }
+    }
+  }
+
+  for (size_t i = 0; i < n; i++) {
+    for (size_t j = n; j < 2 * n; j++) {
+      a->elements[j + i * n] = a->elements[j + i * n] / a->elements[i + i * n];
+    }
+  }
+
+  return a;
 }
 
 /*
