@@ -130,37 +130,59 @@ static struct egl_matrix *egl_matrix_inverse(struct egl_matrix *a) {
     return NULL;
 
   size_t n = a->m;
+  egl_matrix *res = egl_matrix_new(n, 2 * n);
+  if (res == NULL)
+    return NULL;
+
+  res = res->zero(res);
+
+  for (size_t i = 0; i < n; i++) {
+    for (size_t j = 0; j < n; j++) {
+      res->elements[j + i * 2 * n] = a->elements[j + i * n];
+    }
+  }
 
   for (size_t i = 0; i < n; i++) {
     for (size_t j = 0; j < n; j++) {
       if (i == j) {
-        a->elements[(j + n) + i * n] = 1.0;
-      } else {
-        a->elements[(j + n) + i * n] = 0.0;
+        res->elements[(j + n) + i * 2 * n] = 1.0;
       }
     }
   }
 
   for (size_t i = 0; i < n; i++) {
-    if (a->elements[i + i * n] == 0)
-      return NULL;
+    if (res->elements[i + i * 2 * n] == 0) {
+      res->free(res);
+      return NULL; // Error due to division by zero
+    }
 
     for (size_t j = 0; j < n; j++) {
       if (i != j) {
-        double ratio = a->elements[i + j * n] / a->elements[i + i * n];
+        double ratio =
+            res->elements[i + j * 2 * n] / res->elements[i + i * 2 * n];
+
         for (size_t k = 0; k < 2 * n; k++) {
-          a->elements[k + j * n] =
-              a->elements[k + j * n] - (ratio * a->elements[k + i * n]);
+          res->elements[k + j * 2 * n] = res->elements[k + j * 2 * n] -
+                                         (ratio * res->elements[k + i * 2 * n]);
         }
       }
     }
   }
 
   for (size_t i = 0; i < n; i++) {
-    for (size_t j = n; j < 2 * n; j++) {
-      a->elements[j + i * n] = a->elements[j + i * n] / a->elements[i + i * n];
+    double divisor = res->elements[i + i * 2 * n];
+    for (size_t j = 0; j < 2 * n; j++) {
+      res->elements[j + i * 2 * n] = res->elements[j + i * 2 * n] / divisor;
     }
   }
+
+  for (size_t i = 0; i < n; i++) {
+    for (size_t j = n; j < 2 * n; j++) {
+      a->elements[(j - n) + i * n] = res->elements[j + i * 2 * n];
+    }
+  }
+
+  res->free(res);
 
   return a;
 }
