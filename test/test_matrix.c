@@ -137,15 +137,15 @@ void test_det(void) {
 int main(void) {
   UNITY_BEGIN();
   RUN_TEST(test_add);
-  /* RUN_TEST(test_elem_add); */
-  /* RUN_TEST(test_scale); */
-  /* RUN_TEST(test_transpose); */
-  /* RUN_TEST(test_mul); */
-  /* /1* RUN_TEST(test_inverse); *1/ */
-  /* RUN_TEST(test_fill); */
-  /* RUN_TEST(test_zero); */
-  /* /1* RUN_TEST(test_sum); *1/ */
-  /* RUN_TEST(test_trace); */
-  /* RUN_TEST(test_det); */
+  RUN_TEST(test_elem_add);
+  RUN_TEST(test_scale);
+  RUN_TEST(test_transpose);
+  RUN_TEST(test_mul);
+  /* RUN_TEST(test_inverse); */
+  RUN_TEST(test_fill);
+  RUN_TEST(test_zero);
+  /* RUN_TEST(test_sum); */
+  RUN_TEST(test_trace);
+  RUN_TEST(test_det);
   return UNITY_END();
 }
