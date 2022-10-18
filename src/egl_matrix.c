@@ -5,7 +5,7 @@
  * Free a given egl_matrix and its elements
  */
 
-void egl_matrix_free(struct egl_matrix *a) {
+static void egl_matrix_free(struct egl_matrix *a) {
   free(a->elements);
   free(a);
 }
