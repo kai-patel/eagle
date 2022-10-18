@@ -34,6 +34,8 @@ void test_add(void) {
   for (size_t i = 0; i < res->m * res->n; i++) {
     TEST_ASSERT_EQUAL_DOUBLE(mat_b->elements[i] * 2, res->elements[i]);
   }
+
+  mat_b->free(mat_b);
 }
 
 void test_elem_add(void) {
@@ -68,6 +70,8 @@ void test_transpose(void) {
   assert(res);
 
   TEST_ASSERT_EQUAL_DOUBLE_ARRAY(expected, res->elements, mat->m * mat->n);
+
+  res->free(res);
 }
 
 void test_mul(void) {
@@ -87,6 +91,9 @@ void test_mul(void) {
   TEST_ASSERT_NOT_NULL_MESSAGE(
       res, "Expected matrices to have compatible sizes for multiplication");
   TEST_ASSERT_EQUAL_DOUBLE_ARRAY(expected, res->elements, res->m * res->n);
+
+  mat_b->free(mat_b);
+  res->free(res);
 }
 
 void test_inverse(void) { TEST_IGNORE(); }
@@ -130,15 +137,15 @@ void test_det(void) {
 int main(void) {
   UNITY_BEGIN();
   RUN_TEST(test_add);
-  RUN_TEST(test_elem_add);
-  RUN_TEST(test_scale);
-  RUN_TEST(test_transpose);
-  RUN_TEST(test_mul);
-  RUN_TEST(test_inverse);
-  RUN_TEST(test_fill);
-  RUN_TEST(test_zero);
-  RUN_TEST(test_sum);
-  RUN_TEST(test_trace);
-  RUN_TEST(test_det);
+  /* RUN_TEST(test_elem_add); */
+  /* RUN_TEST(test_scale); */
+  /* RUN_TEST(test_transpose); */
+  /* RUN_TEST(test_mul); */
+  /* /1* RUN_TEST(test_inverse); *1/ */
+  /* RUN_TEST(test_fill); */
+  /* RUN_TEST(test_zero); */
+  /* /1* RUN_TEST(test_sum); *1/ */
+  /* RUN_TEST(test_trace); */
+  /* RUN_TEST(test_det); */
   return UNITY_END();
 }

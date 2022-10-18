@@ -30,7 +30,10 @@ static struct egl_LU egl_matrix_decompose(struct egl_matrix *a) {
  */
 
 static void egl_matrix_free(struct egl_matrix *a) {
-  free(a->elements);
+  if (a == NULL)
+    return;
+  if (a->elements != NULL)
+    free(a->elements);
   free(a);
 }
 
@@ -89,7 +92,6 @@ static struct egl_matrix *egl_matrix_transpose(struct egl_matrix *a) {
     }
   }
 
-  free(a);
   return res;
 }
 
@@ -227,6 +229,10 @@ static egl_matrix *egl_matrix_init(egl_matrix *a, size_t m, size_t n) {
     return NULL;
 
   a->elements = calloc(m * n, sizeof(double));
+
+  if (a->elements == NULL)
+    return NULL;
+
   a->m = m;
   a->n = n;
   a->add = &egl_matrix_add;
