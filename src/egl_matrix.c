@@ -132,7 +132,7 @@ static double egl_matrix_trace(struct egl_matrix *a) {
   for (size_t i = 0; i < a->m; i++) {
     for (size_t j = 0; j < a->n; j++) {
       if (i == j)
-        total *= a->elements[j + i * a->n];
+        total += a->elements[j + i * a->n];
     }
   }
 
