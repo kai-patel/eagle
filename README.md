@@ -12,6 +12,7 @@
 - AVL-Balanced Binary Search Trees
 - Singly Linked Lists
 - Hash Tables
+- Matrices
 
 ## Semantics
 
