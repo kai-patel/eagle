@@ -120,7 +120,7 @@ void test_det(void) {
   mat = egl_matrix_new(3, 3);
   double values[] = {2, 5, -3, 4, -8, 2, 0, 6, -1};
 
-  for (int i = 0; i < mat->m * mat->n; i++) {
+  for (size_t i = 0; i < mat->m * mat->n; i++) {
     mat->elements[i] = values[i];
   }
 
