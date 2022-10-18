@@ -4,7 +4,7 @@
 
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/bf8efd10c6394bdda20f9c9f6fb9a65b)](https://www.codacy.com/gh/kai-patel/eagle/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=kai-patel/eagle&amp;utm_campaign=Badge_Grade)
 
-![Lines of Code Badge](https://img.shields.io/tokei/lines/github/kai-patel/eagle)
+[![](https://tokei.rs/b1/github/kai-patel/eagle)](https://github.com/kai-patel/eagle)
 
 ## Fully or Partially Implemented
 
