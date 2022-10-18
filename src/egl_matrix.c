@@ -53,14 +53,15 @@ static struct egl_matrix *egl_matrix_scale(struct egl_matrix *a, double c) {
 
 /*
  * Transpose a given matrix
+ * Returns NULL if an error occurred
  */
 
 static struct egl_matrix *egl_matrix_transpose(struct egl_matrix *a) {
-  egl_matrix *res = egl_matrix_new(a->m, a->n);
+  egl_matrix *res = egl_matrix_new(a->n, a->m);
 
   for (size_t j = 0; j < a->n; j++) {
     for (size_t i = 0; i < a->m; i++) {
-      res->elements[j + i * res->n] = a->elements[i + j * a->n];
+      res->elements[i + j * res->n] = a->elements[j + i * a->n];
     }
   }
 
