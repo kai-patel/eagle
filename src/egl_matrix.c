@@ -5,7 +5,10 @@
  * Free a given egl_matrix and its elements
  */
 
-void egl_matrix_free(struct egl_matrix *a) { return; }
+void egl_matrix_free(struct egl_matrix *a) {
+  free(a->elements);
+  free(a);
+}
 
 /*
  * Add two M-by-N matrices
@@ -53,7 +56,16 @@ static struct egl_matrix *egl_matrix_scale(struct egl_matrix *a, double c) {
  */
 
 static struct egl_matrix *egl_matrix_transpose(struct egl_matrix *a) {
-  return NULL;
+  egl_matrix *res = egl_matrix_new(a->m, a->n);
+
+  for (size_t j = 0; j < a->n; j++) {
+    for (size_t i = 0; i < a->m; i++) {
+      res->elements[j + i * res->n] = a->elements[i + j * a->n];
+    }
+  }
+
+  free(a);
+  return res;
 }
 
 /*
