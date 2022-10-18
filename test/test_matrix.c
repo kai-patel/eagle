@@ -5,7 +5,10 @@
 
 egl_matrix *mat;
 
-void setUp(void) { mat = egl_matrix_new(4, 5); }
+void setUp(void) {
+  mat = egl_matrix_new(4, 5);
+  TEST_ASSERT_NOT_NULL_MESSAGE(mat, "Expected to create a new matrix");
+}
 
 void createTestElements(void) {
   for (size_t i = 0; i < mat->m * mat->n; i++) {
@@ -53,7 +56,19 @@ void test_scale(void) {
   }
 }
 
-void test_transpose(void) { TEST_IGNORE(); }
+void test_transpose(void) {
+  createTestElements();
+
+  egl_matrix *res = mat->transpose(mat);
+
+  double expected[20] = {0,  5,  10, 15, 1,  6,  11, 16, 2,  7,
+                         12, 17, 3,  8,  13, 18, 4,  9,  14, 19};
+
+  assert(expected); // Stop unused variable compiler warning
+  assert(res);
+
+  TEST_ASSERT_EQUAL_DOUBLE_ARRAY(expected, res->elements, mat->m * mat->n);
+}
 
 void test_mul(void) {
   createTestElements();
