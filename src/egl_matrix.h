@@ -21,6 +21,15 @@ typedef struct egl_matrix {
   void (*free)(struct egl_matrix *);
 } egl_matrix;
 
+/*
+ * Struct for results of LU decomposition operations
+ */
+
+typedef struct egl_LU {
+  struct egl_matrix *L;
+  struct egl_matrix *U;
+} egl_LU;
+
 egl_matrix *egl_matrix_new(size_t, size_t);
 
 #endif

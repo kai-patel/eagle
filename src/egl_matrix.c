@@ -1,6 +1,29 @@
 #include "egl_matrix.h"
-#include <stdio.h>
 #include <stdlib.h>
+
+static struct egl_LU decompose(struct egl_matrix *a) {
+  size_t n = a->m;
+  egl_matrix *L = egl_matrix_new(n, n);
+  egl_matrix *U = egl_matrix_new(n, n);
+
+  for (size_t k = 0; k < n; k++) {
+    U->elements[k + k * n] = a->elements[k + k * n];
+    for (size_t i = k; i < n; i++) {
+      L->elements[k + i * n] = a->elements[k + i * n] / U->elements[k + k * n];
+      U->elements[i + k * n] = a->elements[i + k * n];
+    }
+    for (size_t i = k; i < n; i++) {
+      for (size_t j = k; j < n; j++) {
+        a->elements[j + i * n] =
+            a->elements[j + i * n] -
+            (L->elements[k + i * n] * U->elements[j + k * n]);
+      }
+    }
+  }
+
+  egl_LU pair = {.L = L, .U = U};
+  return pair;
+}
 
 /*
  * Free a given egl_matrix and its elements
@@ -155,7 +178,8 @@ static double egl_matrix_trace(struct egl_matrix *a) {
 
 /*
  * Calculate the determinant of a given matrix
- * Returns 0.0 if the matrix is not square
+ * Factorises the given matrix through LU decomposition
+ * Returns 0.0 if the matrix is not square, or on error
  */
 
 static double egl_matrix_det(struct egl_matrix *a) {
@@ -163,23 +187,12 @@ static double egl_matrix_det(struct egl_matrix *a) {
     return 0.0;
 
   size_t n = a->m;
-  egl_matrix *L = egl_matrix_new(n, n);
-  egl_matrix *U = egl_matrix_new(n, n);
+  struct egl_LU LU = decompose(a);
+  egl_matrix *L = LU.L;
+  egl_matrix *U = LU.U;
 
-  for (size_t k = 0; k < n; k++) {
-    U->elements[k + k * n] = a->elements[k + k * n];
-    for (size_t i = k; i < n; i++) {
-      L->elements[k + i * n] = a->elements[k + i * n] / U->elements[k + k * n];
-      U->elements[i + k * n] = a->elements[i + k * n];
-    }
-    for (size_t i = k; i < n; i++) {
-      for (size_t j = k; j < n; j++) {
-        a->elements[j + i * n] =
-            a->elements[j + i * n] -
-            (L->elements[k + i * n] * U->elements[j + k * n]);
-      }
-    }
-  }
+  if (L == NULL || U == NULL)
+    return 0.0;
 
   double detU = 1.0;
   double detL = 1.0;
