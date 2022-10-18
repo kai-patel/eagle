@@ -1,7 +1,7 @@
 #include "egl_matrix.h"
 #include <stdlib.h>
 
-static struct egl_LU decompose(struct egl_matrix *a) {
+static struct egl_LU egl_matrix_decompose(struct egl_matrix *a) {
   size_t n = a->m;
   egl_matrix *L = egl_matrix_new(n, n);
   egl_matrix *U = egl_matrix_new(n, n);
@@ -187,7 +187,7 @@ static double egl_matrix_det(struct egl_matrix *a) {
     return 0.0;
 
   size_t n = a->m;
-  struct egl_LU LU = decompose(a);
+  struct egl_LU LU = egl_matrix_decompose(a);
   egl_matrix *L = LU.L;
   egl_matrix *U = LU.U;
 
@@ -238,6 +238,7 @@ static egl_matrix *egl_matrix_init(egl_matrix *a, size_t m, size_t n) {
   a->fill = &egl_matrix_fill;
   a->zero = &egl_matrix_zero;
   a->sum = &egl_matrix_sum;
+  a->lu_decompose = &egl_matrix_decompose;
   a->trace = &egl_matrix_trace;
   a->det = &egl_matrix_det;
   a->free = &egl_matrix_free;
