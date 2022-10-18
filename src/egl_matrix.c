@@ -1,4 +1,5 @@
 #include "egl_matrix.h"
+#include <stdio.h>
 #include <stdlib.h>
 
 /*
@@ -167,12 +168,12 @@ static double egl_matrix_det(struct egl_matrix *a) {
 
   for (size_t k = 0; k < n; k++) {
     U->elements[k + k * n] = a->elements[k + k * n];
-    for (size_t i = k + 1; i < n; i++) {
+    for (size_t i = k; i < n; i++) {
       L->elements[k + i * n] = a->elements[k + i * n] / U->elements[k + k * n];
       U->elements[i + k * n] = a->elements[i + k * n];
     }
-    for (size_t i = k + 1; i < n; i++) {
-      for (size_t j = k + 1; j < n; j++) {
+    for (size_t i = k; i < n; i++) {
+      for (size_t j = k; j < n; j++) {
         a->elements[j + i * n] =
             a->elements[j + i * n] -
             (L->elements[k + i * n] * U->elements[j + k * n]);
