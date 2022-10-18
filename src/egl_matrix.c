@@ -9,11 +9,19 @@ void egl_matrix_free(struct egl_matrix *a) { return; }
 
 /*
  * Add two M-by-N matrices
+ * Returns NULL if the matrices are different sizes
  */
 
 static struct egl_matrix *egl_matrix_add(struct egl_matrix *a,
                                          struct egl_matrix *b) {
-  return NULL;
+  if (a->m != b->m || a->n != b->n)
+    return NULL;
+
+  for (size_t i = 0; i < a->n * a->m; i++) {
+    a->elements[i] += b->elements[i];
+  }
+
+  return a;
 }
 
 /*
@@ -21,7 +29,11 @@ static struct egl_matrix *egl_matrix_add(struct egl_matrix *a,
  */
 
 static struct egl_matrix *egl_matrix_elem_add(struct egl_matrix *a, double k) {
-  return NULL;
+  for (size_t i = 0; i < a->m * a->n; i++) {
+    a->elements[i] += k;
+  }
+
+  return a;
 }
 
 /*
@@ -29,7 +41,11 @@ static struct egl_matrix *egl_matrix_elem_add(struct egl_matrix *a, double k) {
  */
 
 static struct egl_matrix *egl_matrix_scale(struct egl_matrix *a, double c) {
-  return NULL;
+  for (size_t i = 0; i < a->m * a->n; i++) {
+    a->elements[i] *= c;
+  }
+
+  return a;
 }
 
 /*
@@ -42,11 +58,27 @@ static struct egl_matrix *egl_matrix_transpose(struct egl_matrix *a) {
 
 /*
  * Calculate the matrix product of an M-by-N matrix and a N-by-P matrix
+ * Returns NULL if the matrices have incompatible sizes
  */
 
 static struct egl_matrix *egl_matrix_mul(struct egl_matrix *a,
                                          struct egl_matrix *b) {
-  return NULL;
+  if (a->n != b->m)
+    return NULL;
+
+  egl_matrix *res = egl_matrix_new(a->m, b->n);
+
+  for (size_t i = 0; i < a->m; i++) {
+    for (size_t j = 0; j < b->n; j++) {
+      double sum = 0.0;
+      for (size_t k = 0; k < a->n; k++) {
+        sum += a->elements[k + i * a->n] * b->elements[j + k * b->n];
+      }
+      res->elements[j + i * res->n] = sum;
+    }
+  }
+
+  return res;
 }
 
 /*
@@ -62,13 +94,25 @@ static struct egl_matrix *egl_matrix_inverse(struct egl_matrix *a) {
  * Fills a given matrix with a specified value
  */
 
-static struct egl_matrix *egl_matrix_fill(struct egl_matrix *a) { return NULL; }
+static struct egl_matrix *egl_matrix_fill(struct egl_matrix *a, double k) {
+  for (size_t i = 0; i < a->m * a->n; i++) {
+    a->elements[i] = k;
+  }
+
+  return a;
+}
 
 /*
  * Sets all values in a given matrix to zero
  */
 
-static struct egl_matrix *egl_matrix_zero(struct egl_matrix *a) { return NULL; }
+static struct egl_matrix *egl_matrix_zero(struct egl_matrix *a) {
+  for (size_t i = 0; i < a->m * a->n; i++) {
+    a->elements[i] = 0.0;
+  }
+
+  return a;
+}
 
 /*
  * Sum the values of a matrix along a specified axis
@@ -83,7 +127,17 @@ static struct egl_matrix *egl_matrix_sum(size_t index,
  * Calculate the trace of a given matrix
  */
 
-static double egl_matrix_trace(struct egl_matrix *a) { return 0.0; }
+static double egl_matrix_trace(struct egl_matrix *a) {
+  double total = 0.0;
+  for (size_t i = 0; i < a->m; i++) {
+    for (size_t j = 0; j < a->n; j++) {
+      if (i == j)
+        total *= a->elements[j + i * a->n];
+    }
+  }
+
+  return total;
+}
 
 /*
  * Calculate the determinant of a given matrix
@@ -101,6 +155,8 @@ static egl_matrix *egl_matrix_init(egl_matrix *a, size_t m, size_t n) {
     return NULL;
 
   a->elements = calloc(m * n, sizeof(double));
+  a->m = m;
+  a->n = n;
   a->add = &egl_matrix_add;
   a->elem_add = &egl_matrix_elem_add;
   a->scale = &egl_matrix_scale;

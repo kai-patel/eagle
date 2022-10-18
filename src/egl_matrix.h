@@ -13,7 +13,7 @@ typedef struct egl_matrix {
   struct egl_matrix *(*transpose)(struct egl_matrix *);
   struct egl_matrix *(*mul)(struct egl_matrix *, struct egl_matrix *);
   struct egl_matrix *(*inverse)(struct egl_matrix *);
-  struct egl_matrix *(*fill)(struct egl_matrix *);
+  struct egl_matrix *(*fill)(struct egl_matrix *, double);
   struct egl_matrix *(*zero)(struct egl_matrix *);
   struct egl_matrix *(*sum)(size_t, enum EGL_MATRIX_AXIS);
   double (*trace)(struct egl_matrix *);
