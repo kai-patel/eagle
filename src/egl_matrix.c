@@ -154,9 +154,54 @@ static double egl_matrix_trace(struct egl_matrix *a) {
 
 /*
  * Calculate the determinant of a given matrix
+ * Returns 0.0 if the matrix is not square
  */
 
-static double egl_matrix_det(struct egl_matrix *a) { return 0.0; }
+static double egl_matrix_det(struct egl_matrix *a) {
+  if (a->m != a->n)
+    return 0.0;
+
+  size_t n = a->m;
+  egl_matrix *L = egl_matrix_new(n, n);
+  egl_matrix *U = egl_matrix_new(n, n);
+
+  for (size_t k = 0; k < n; k++) {
+    U->elements[k + k * n] = a->elements[k + k * n];
+    for (size_t i = k + 1; i < n; i++) {
+      L->elements[k + i * n] = a->elements[k + i * n] / U->elements[k + k * n];
+      U->elements[i + k * n] = a->elements[i + k * n];
+    }
+    for (size_t i = k + 1; i < n; i++) {
+      for (size_t j = k + 1; j < n; j++) {
+        a->elements[j + i * n] =
+            a->elements[j + i * n] -
+            (L->elements[k + i * n] * U->elements[j + k * n]);
+      }
+    }
+  }
+
+  double detU = 1.0;
+  double detL = 1.0;
+
+  for (size_t i = 0; i < n; i++) {
+    for (size_t j = 0; j < n; j++) {
+      if (i == j)
+        detU *= U->elements[j + i * n];
+    }
+  }
+
+  for (size_t i = 0; i < n; i++) {
+    for (size_t j = 0; j < n; j++) {
+      if (i == j)
+        detL *= L->elements[j + i * n];
+    }
+  }
+
+  U->free(U);
+  L->free(L);
+
+  return detU * detL;
+}
 
 /*
  * Initialise a newly created egl_matrix of given size
