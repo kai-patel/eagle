@@ -115,7 +115,17 @@ void test_trace(void) {
   TEST_ASSERT_EQUAL_DOUBLE(36, mat->trace(mat));
 }
 
-void test_det(void) { TEST_IGNORE(); }
+void test_det(void) {
+  mat->free(mat);
+  mat = egl_matrix_new(3, 3);
+  double values[] = {2, 5, -3, 4, -8, 2, 0, 6, -1};
+
+  for (int i = 0; i < mat->m * mat->n; i++) {
+    mat->elements[i] = values[i];
+  }
+
+  TEST_ASSERT_EQUAL_DOUBLE(-60, mat->det(mat));
+}
 
 int main(void) {
   UNITY_BEGIN();
