@@ -1,9 +1,20 @@
 #include "../src/libeagle.h"
 #include "../vendor/Unity/unity.h"
 #include <assert.h>
+#include <stdio.h>
 #include <stdlib.h>
 
 egl_matrix *mat;
+
+void print_matrix(egl_matrix *a) {
+  for (size_t i = 0; i < a->m; i++) {
+    for (size_t j = 0; j < a->n; j++) {
+      printf("%.1f ", a->elements[j + i * a->n]);
+    }
+    printf("\n");
+  }
+  printf("\n");
+}
 
 void setUp(void) {
   mat = egl_matrix_new(4, 5);
@@ -102,7 +113,7 @@ void test_inverse(void) {
   double elements[] = {1.0, 1.0, 3.0, 1.0, 3.0, -3.0, -2.0, -4.0, -4.0};
 
   mat = egl_matrix_new(3, 3);
-  for (size_t i = 0; i < mat->m; i++) {
+  for (size_t i = 0; i < mat->m * mat->n; i++) {
     mat->elements[i] = elements[i];
   }
 
@@ -164,7 +175,7 @@ int main(void) {
   RUN_TEST(test_inverse);
   RUN_TEST(test_fill);
   RUN_TEST(test_zero);
-  /* RUN_TEST(test_sum); */
+  RUN_TEST(test_sum);
   RUN_TEST(test_trace);
   RUN_TEST(test_det);
   return UNITY_END();
