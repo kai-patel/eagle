@@ -20,7 +20,7 @@ void test_add(void) {
   egl_matrix *mat_b = egl_matrix_new(4, 5);
 
   for (size_t i = 0; i < mat_b->m * mat_b->n; i++) {
-    mat->elements[i] = (double)i;
+    mat_b->elements[i] = (double)i;
   }
 
   egl_matrix *res = mat->add(mat, mat_b);
@@ -58,6 +58,10 @@ void test_transpose(void) { TEST_IGNORE(); }
 void test_mul(void) {
   createTestElements();
   egl_matrix *mat_b = egl_matrix_new(5, 1);
+
+  for (size_t i = 0; i < mat_b->m * mat_b->n; i++) {
+    mat_b->elements[i] = (double)i;
+  }
 
   egl_matrix *res = mat->mul(mat, mat_b);
 
