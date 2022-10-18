@@ -25,6 +25,7 @@ TEST_FRAMEWORK := $(wildcard $(VENDOR)/Unity/*.c)
 CC := clang
 CFLAGS := -Wall -Wextra -pedantic -std=c99 -g -gcodeview
 LFLAGS :=
+TFLAGS := -DUNITY_INCLUDE_DOUBLE
 
 .PHONY: all clean test runtests
 
@@ -42,7 +43,7 @@ runtests: test
 	$(foreach var,$(TEST_BINS),$(CALL) "$(var)"$(AND))
 
 $(TEST)/tests/%.exe: $(TEST)/%.c $(OUT) $(TEST_FRAMEWORK)
-	$(CC) $(CFLAGS) $^ -o $@
+	$(CC) $(CFLAGS) $(TFLAGS) $^ -o $@
 
 clean:
 	$(DELETE) $(OUT)
