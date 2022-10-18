@@ -96,7 +96,27 @@ void test_mul(void) {
   res->free(res);
 }
 
-void test_inverse(void) { TEST_IGNORE(); }
+void test_inverse(void) {
+  mat->free(mat);
+
+  double elements[] = {1.0, 1.0, 3.0, 1.0, 3.0, -3.0, -2.0, -4.0, -4.0};
+
+  mat = egl_matrix_new(3, 3);
+  for (size_t i = 0; i < mat->m; i++) {
+    mat->elements[i] = elements[i];
+  }
+
+  double expected[] = {3.000,  1.000,  1.500,  -1.250, -0.250,
+                       -0.750, -0.250, -0.250, -0.250};
+
+  egl_matrix *res = mat->inverse(mat);
+
+  assert(expected);
+  assert(res);
+
+  TEST_ASSERT_NOT_NULL_MESSAGE(res, "Expected to be able to invert matrix");
+  TEST_ASSERT_EQUAL_DOUBLE_ARRAY(expected, res->elements, res->m * res->n);
+}
 
 void test_fill(void) {
   double filler = 12.0;
@@ -141,7 +161,7 @@ int main(void) {
   RUN_TEST(test_scale);
   RUN_TEST(test_transpose);
   RUN_TEST(test_mul);
-  /* RUN_TEST(test_inverse); */
+  RUN_TEST(test_inverse);
   RUN_TEST(test_fill);
   RUN_TEST(test_zero);
   /* RUN_TEST(test_sum); */
