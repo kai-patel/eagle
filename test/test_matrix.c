@@ -145,7 +145,20 @@ void test_zero(void) {
                                         "Expected every element to be 0.0");
 }
 
-void test_sum(void) { TEST_IGNORE(); }
+void test_sum(void) {
+  createTestElements();
+
+  double row = mat->sum(mat, 0, ROW);
+  double col = mat->sum(mat, 0, COLUMN);
+
+  double main_diag = mat->sum(mat, 0, DIAGONAL);
+  double sec_diag = mat->sum(mat, 3, SECONDARY_DIAGONAL);
+
+  TEST_ASSERT_EQUAL_DOUBLE(10.0, row);
+  TEST_ASSERT_EQUAL_DOUBLE(30.0, col);
+  TEST_ASSERT_EQUAL_DOUBLE(36.0, main_diag);
+  TEST_ASSERT_EQUAL_DOUBLE(40.0, sec_diag);
+}
 
 void test_trace(void) {
   createTestElements();
