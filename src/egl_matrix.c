@@ -1,4 +1,6 @@
 #include "egl_matrix.h"
+#include <stdint.h>
+#include <stdio.h>
 #include <stdlib.h>
 
 static struct egl_LU egl_matrix_decompose(struct egl_matrix *a) {
@@ -217,7 +219,28 @@ static struct egl_matrix *egl_matrix_zero(struct egl_matrix *a) {
 
 static double egl_matrix_sum(struct egl_matrix *a, size_t index,
                              enum EGL_MATRIX_AXIS axis) {
-  return 0.0;
+  double total = 0.0;
+
+  if (axis == ROW) {
+    for (size_t i = 0; i < a->n; i++) {
+      total += a->elements[i + index * a->n];
+    }
+  } else if (axis == COLUMN) {
+    for (size_t i = 0; i < a->m; i++) {
+      total += a->elements[index + i * a->n];
+    }
+  } else if (axis == DIAGONAL) {
+    for (size_t i = index; i < a->n * a->m; i += a->n + 1) {
+      total += a->elements[i];
+    }
+  } else if (axis == SECONDARY_DIAGONAL) {
+    // Use signed int (avoid overflows)
+    for (int64_t i = (index + 1) * a->n - 1; i > 0; i -= a->n + 1) {
+      total += a->elements[(size_t)i];
+    }
+  }
+
+  return total;
 }
 
 /*
