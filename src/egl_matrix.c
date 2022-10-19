@@ -215,9 +215,9 @@ static struct egl_matrix *egl_matrix_zero(struct egl_matrix *a) {
  * Sum the values of a matrix along a specified axis
  */
 
-static struct egl_matrix *egl_matrix_sum(size_t index,
-                                         enum EGL_MATRIX_AXIS axis) {
-  return NULL;
+static double egl_matrix_sum(struct egl_matrix *a, size_t index,
+                             enum EGL_MATRIX_AXIS axis) {
+  return 0.0;
 }
 
 /*
@@ -288,8 +288,10 @@ static egl_matrix *egl_matrix_init(egl_matrix *a, size_t m, size_t n) {
 
   a->elements = calloc(m * n, sizeof(double));
 
-  if (a->elements == NULL)
+  if (a->elements == NULL) {
+    free(a);
     return NULL;
+  }
 
   a->m = m;
   a->n = n;
