@@ -2,6 +2,7 @@
 #define EGL_GRAPH_H
 
 #include "egl_llist.h"
+#include "egl_matrix.h"
 #include "egl_vector.h"
 
 enum EGL_GRAPH_TYPE { ADJ_LIST, ADJ_MATRIX };
@@ -11,8 +12,8 @@ typedef struct egl_graph {
   bool is_weighted;
   union {
     egl_vector *adjacency_list;
-    egl_vector *adjacency_matrix;
-  };
+    egl_matrix *adjacency_matrix;
+  } representation;
   bool (*adjacent)(struct egl_graph *, void *, void *);
   bool (*has_cycles)(struct egl_graph *);
   void *(*add_vertex)(struct egl_graph *, void *);
@@ -20,7 +21,7 @@ typedef struct egl_graph {
   void *(*add_edge)(struct egl_graph *, void *, void *, void *);
   void *(*remove_edge)(struct egl_graph *, void *, void *);
   void *(*get_vertex)(struct egl_graph *, void *);
-  void *(*set_vertex)(struct egl_graph *, void *);
+  void *(*set_vertex)(struct egl_graph *, void *, void *);
   void **(*components)(struct egl_graph *);
   void **(*neighbours)(struct egl_graph *, void *);
   void **(*top_sort)(struct egl_graph *);
