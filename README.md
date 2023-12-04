@@ -24,15 +24,15 @@
 
 ### Data Structures
 
-[x] Type-agnostic dynamic arrays (vectors)
-[x] Linked lists
-[x] Hash tables
-[] Queues, deques
-[x] Binary trees
-[] N-ary trees
-[]   - Tries?
-[] Graphs
-[x] Matrices and vectors
+* [x] Type-agnostic dynamic arrays (vectors)
+* [x] Linked lists
+* [x] Hash tables
+* [] Queues, deques
+* [x] Binary trees
+* [] N-ary trees
+* []   - Tries?
+* [] Graphs
+* [x] Matrices and vectors
 
 ### Algorithms
 
