@@ -27,11 +27,11 @@
 * [x] Type-agnostic dynamic arrays (vectors)
 * [x] Linked lists
 * [x] Hash tables
-* [] Queues, deques
+* [ ] Queues, deques
 * [x] Binary trees
-* [] N-ary trees
-* []   - Tries?
-* [] Graphs
+* [ ] N-ary trees
+* [ ]   - Tries?
+* [ ] Graphs
 * [x] Matrices and vectors
 
 ### Algorithms
