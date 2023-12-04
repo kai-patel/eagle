@@ -30,7 +30,7 @@
 * [ ] Queues, deques
 * [x] Binary trees
 * [ ] N-ary trees
-* [ ]   - Tries?
+    * [ ]   - Tries?
 * [ ] Graphs
 * [x] Matrices and vectors
 
