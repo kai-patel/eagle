@@ -20,10 +20,13 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
+    - name: Configure
+      run: cmake -S ${GITHUB_WORKSPACE} -B ${GITHUB_WORKSPACE}/build -G "Unix Makefiles" -D CMAKE_C_COMPILER="/usr/bin/clang" "$@"
+
     - name: Build
-      run: ${GITHUB_WORKSPACE}/scripts/build.sh
+      run: cmake --build ${GITHUB_WORKSPACE}/build
 
     - name: Test
-      run: ${GITHUB_WORKSPACE}/scripts/test.sh
-    
+      run: ctest --test-dir ${GITHUB_WORKSPACE}/build/
+
 

@@ -1,6 +1,8 @@
 #ifndef EGL_MATRIX_H
 #define EGL_MATRIX_H
 
+#include <stddef.h>
+
 enum EGL_MATRIX_AXIS { ROW, COLUMN, DIAGONAL, SECONDARY_DIAGONAL };
 
 typedef struct egl_matrix {
