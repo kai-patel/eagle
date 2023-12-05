@@ -1,3 +1,7 @@
 *.o
 *.exe
 test/tests/*
+build/*
+vendor
+*.swp
+.vim
