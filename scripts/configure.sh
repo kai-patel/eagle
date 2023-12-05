@@ -1,2 +1,3 @@
 #!/bin/bash
-cmake -S ../ -B build
+SCRIPT_DIR=$(dirname "$0")
+cmake -S ${SCRIPT_DIR}/.. -B ${SCRIPT_DIR}/../build
