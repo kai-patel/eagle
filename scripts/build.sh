@@ -1,2 +1,3 @@
 #!/bin/bash
-./configure.sh && ./compile.sh
+SCRIPT_DIR=$(dirname "$0")
+${SCRIPT_DIR}/configure.sh && ${SCRIPT_DIR}/compile.sh

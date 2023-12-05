@@ -1,5 +1,5 @@
-#include "../src/libeagle.h"
-#include "../vendor/Unity/unity.h"
+#include "libeagle.h"
+#include <unity.h>
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>

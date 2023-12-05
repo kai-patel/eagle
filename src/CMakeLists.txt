@@ -9,4 +9,5 @@ add_library(
     egl_vector.c
     )
 
-target_include_directories(libeagle ${PROJECT_SOURCE_DIR}/src/include)
+target_include_directories(libeagle PUBLIC "${PROJECT_SOURCE_DIR}/src/include")
+set_target_properties(libeagle PROPERTIES PREFIX "" OUTPUT_NAME "libeagle")

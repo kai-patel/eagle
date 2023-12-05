@@ -4,6 +4,7 @@
 #include "egl_vector.h"
 #include <stdbool.h>
 #include <stdint.h>
+#include <stddef.h>
 
 /* Internal struct used to represent non-empty buckets
  * Empty buckets are represented as NULL

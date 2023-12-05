@@ -1,5 +1,5 @@
-#include "../src/libeagle.h"
-#include "../vendor/Unity/unity.h"
+#include "libeagle.h"
+#include <unity.h>
 #include <stdlib.h>
 
 egl_bstree *tree;
